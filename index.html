@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+<body>
+    <div class="container" style="margin-top: 30px;">
+        <div class="row">
+            <div class="col-md-3">
+                <button id="enter_participants" class="btn btn-success w-100">Enter 10 Participants</button>
+            </div>
+            <div class="col-md-3">
+                <button id="get_participant_details" class="btn btn-warning w-100">Get Participant Details</button>
+            </div>
+            <div class="col-md-3">
+                <button id="get_holdings_of_the_system" class="btn btn-info w-100">Get Holdings of the System</button>
+            </div>
+            <div class="col-md-3">
+                <button id="maintenance_expense_report" class="btn btn-primary w-100">Maintenance & Expense Report</button>
+            </div>
+        </div>
+        <div class="row justify-content-md-center" style="margin-top: 15px;">
+            <div class="col-md-3">
+                <button id="purchase_car" class="btn btn-purple w-100">Purchase Car</button>
+            </div>
+        </div>
+        <div class="row" style="background-color: lightgray; margin-top: 100px; height: 500px;">
+            <h5 style="margin-top: 10px; width: 100%; text-align: center;">
+                <span id="results_title" class="title">Results will be displayed here...</span>
+                <hr style="margin: 10px 0 0 0; height: 1px; border: none; color: #333; background-color: #333;" />
+            </h5>
+            <div id="results_div" class="col-md-12" style="height: 442px; overflow-y: auto;">
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+        try {
+            web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
+            
+            // Get an instance of the contract 
+            var taxiBusiness = new web3.eth.Contract(
+                [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"string","name":"eventType","type":"string"},{"indexed":false,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"MaintenanceExpenseEvent","type":"event"},{"stateMutability":"nonpayable","type":"fallback"},{"inputs":[],"name":"approveDriver","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"approvePurchaseCar","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"approveSellProposal","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"carDealer","outputs":[{"internalType":"address payable","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"carExpenses","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_carID","type":"uint256"},{"internalType":"uint256","name":"_price","type":"uint256"},{"internalType":"uint256","name":"_offerValidTime","type":"uint256"}],"name":"carProposeToBusiness","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"contractBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"fireDriver","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getCharge","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"getDividend","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getParticipantCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"participantIndex","type":"uint256"}],"name":"getParticipantDetails","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address payable","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getSalary","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"join","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"manager","outputs":[{"internalType":"address payable","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"ownedCar","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"participantArray","outputs":[{"internalType":"address payable","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"participants","outputs":[{"internalType":"address payable","name":"participantAdress","type":"address"},{"internalType":"uint256","name":"account","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"payDividend","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address payable","name":"_driverAdress","type":"address"},{"internalType":"uint256","name":"_salary","type":"uint256"}],"name":"proposeDriver","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"purchaseCar","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"releaseSalary","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"repurchaseCar","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_carID","type":"uint256"},{"internalType":"uint256","name":"_price","type":"uint256"},{"internalType":"uint256","name":"_offerValidTime","type":"uint256"}],"name":"repurchaseCarPropose","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address payable","name":"_carDealer","type":"address"}],"name":"setCarDealer","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"setDriver","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"taxiDriver","outputs":[{"internalType":"address payable","name":"driverAdress","type":"address"},{"internalType":"uint256","name":"salary","type":"uint256"},{"internalType":"uint256","name":"account","type":"uint256"}],"stateMutability":"view","type":"function"},{"stateMutability":"payable","type":"receive"}],
+                "0x8a3093E6C349715a109BDB22C07bd7586bdFdE04"
+            );
+
+            console.log(taxiBusiness);
+            
+            // Display a success message
+            $('#results_div').append('<p class="success-text">Success: Connected to the smart contract.</p>');
+        } 
+        catch (error) {
+            // Display an error message
+            $('#results_div').append('<p class="error-text">' + error + '</p>');
+        }
+
+        $(document).ready(function() {
+            web3.eth.getAccounts().then(function (accounts) {
+                // Enter participants
+                $('#enter_participants').click(function (event) {
+                    $('#results_div').empty();
+
+                    // Change title
+                    $('#results_title').text('Enter 10 Participants to the System');
+
+                    for (var i = 1; i < 11; i++) { // The account zero used for the Manager
+                        taxiBusiness.methods.join().send({from: accounts[i], gas: 1000000, value: 100000000000000000000}, function(error, result) {
+                            if (error) {
+                                $('#results_div').append('<p class="error-text">' + error + '</p>');
+                            }
+                            else {
+                                $('#results_div').append('<p>' + 'Success: ' + accounts[i] + '</p>');
+                            }
+                            $('#results_div').append('<hr>');
+                        });
+                    } 
+                });
+                
+                // Get participant details
+                $('#get_participant_details').click(function (event) {
+                    $('#results_div').empty();
+
+                    // Change title
+                    $('#results_title').text('Participant Details');
+
+                    taxiBusiness.methods.getParticipantCount().call(function(error, participantCount) {
+                        if (error) {
+                            $('#results_div').append('<p class="error-text">' + error + '</p>');
+                        } else {
+                            // Display warning message if no participant exist
+                            if (participantCount == 0) {
+                                $('#results_div').append('<p>There is no participant on the system!</p>');
+                            }
+
+                            // Display participant details if exist
+                            for (var i = 0; i < participantCount; i++) {
+                                taxiBusiness.methods.getParticipantDetails(i).call(function await (error, response) {
+                                    if (error) {
+                                        $('#results_div').append('<p class="error-text">' + error + '</p>');
+                                    } else {
+                                        $('#results_div').append('<p style="margin-bottom: 0;"><span class="bold">Participant['+ response[0] +'] Adress: </span>' + response[1] + '</p>');
+                                        $('#results_div').append('<p style="margin-bottom: 0;"><span class="bold">-------------- Balance: </span>' + response[2] + ' wei</p>');
+                                        $('#results_div').append('<p><span class="bold">-------------- Account: </span>' + response[3] + ' wei</p>');
+                                    }
+                                    $('#results_div').append('<hr>');
+                                });
+                            }
+                        }
+                    });
+                });
+                
+                // Get current holdings of the system
+                $('#get_holdings_of_the_system').click(function (event) {
+                    $('#results_div').empty();
+
+                    // Change title
+                    $('#results_title').text('Current Holdings of the System');
+
+                    // Fetch contract balance
+                    taxiBusiness.methods.contractBalance().call(function(error, response) {
+                        if (error) {
+                            $('#results_div').append('<p class="error-text">' + error + '</p>');
+                        } else {
+                            $('#results_div').append('<p><span class="bold">Contract Balance: </span>' + response + ' wei</p>');
+                        }
+                    });
+                    
+                    // Display address of the contract
+                    $('#results_div').append('<p><span class="bold">Contract Adress: </span>' + taxiBusiness._address + '</p>');
+
+                    // Fetch address of the manager
+                    taxiBusiness.methods.manager().call(function(error, response) {
+                        if (error) {
+                            $('#results_div').append('<p class="error-text">' + error + '</p>');
+                        } else {
+                            $('#results_div').append('<p><span class="bold">Manager Adress: </span>' + response + '</p>');
+                        }
+                    });
+
+                    // Fetch address of the car dealer
+                    taxiBusiness.methods.carDealer().call(function(error, response) {
+                        if (error) {
+                            $('#results_div').append('<p class="error-text">' + error + '</p>');
+                        } else {
+                            $('#results_div').append('<p><span class="bold">Car Dealer Adress: </span>' + response + '</p>');
+                        }
+                    });
+
+                    // Fetch address of the car dealer
+                    taxiBusiness.methods.taxiDriver().call(function(error, response) {
+                        if (error) {
+                            $('#results_div').append('<p class="error-text">' + error + '</p>');
+                        } else {
+                            $('#results_div').append('<p style="margin-bottom: 0;"><span class="bold">Taxi Driver Adress: </span>' + response[0] + '</p>');
+                            $('#results_div').append('<p style="margin-bottom: 0;"><span class="bold">----------- Salary: </span>' + response[1] + ' wei</p>');
+                            $('#results_div').append('<p><span class="bold">----------- Balance: </span>' + response[2] + ' wei</p>');
+                        }
+                    });
+                    
+                    // Fetch current car
+                    taxiBusiness.methods.ownedCar().call(function(error, response) {
+                        if (error) {
+                            $('#results_div').append('<p class="error-text">' + error + '</p>');
+                        } else {
+                            $('#results_div').append('<p><span class="bold">Owned Car: </span>' + response + '</p>');
+                        }
+                    });
+
+                    // Fetch participants
+                    taxiBusiness.methods.getParticipantCount().call(function(error, response) {
+                        if (error) {
+                            $('#results_div').append('<p class="error-text">' + error + '</p>');
+                        } else {
+                            $('#results_div').append('<p><span class="bold">Participant Count: </span>' + response + '</p>');
+                        }
+                    });
+                });
+
+                // Maintenance and Expense Report
+                $('#maintenance_expense_report').click(function (event) {
+                    $('#results_div').empty();
+
+                    // Append header
+                    $('#results_title').text('Maintenance & Expense Report (Uses a websocket, so emitted events will be displayed automatically)');
+                    
+                    taxiBusiness.events.MaintenanceExpenseEvent({fromBlock: 0, toBlock: 'latest'}, function(error, event) {
+                        if (error) {
+                            $('#results_div').append('<p class="error-text">' + error + '</p>');
+                        } else {
+                            // Convert the event time and localize
+                            var dateTimeString = new Date((event.returnValues['timestamp'] * 1000) + 3*60*60000).toUTCString()
+
+                            $('#results_div').append('<p style="margin-bottom: 0;"><span class="bold">Event Type: </span>' + event.returnValues['eventType'] + '</p>');
+                            $('#results_div').append('<p style="margin-bottom: 0;"><span class="bold">----- Reciever: </span>' + event.returnValues['to'] + '</p>');
+                            $('#results_div').append('<p style="margin-bottom: 0;"><span class="bold">----- Amount: </span>' + event.returnValues['amount'] + ' wei</p>');
+                            $('#results_div').append('<p><span class="bold">----- Time: </span>' + dateTimeString + '</p>');
+                        }
+                        $('#results_div').append('<hr>');
+                    });
+                });
+
+                // Purchase a car
+                $('#purchase_car').click(function (event) {
+                    $('#results_div').empty();
+
+                    // Append header
+                    $('#results_title').text('Purchase a New Car');
+
+                    taxiBusiness.methods.carDealer().call(function (error, carDealer) {
+                        if (error) {
+                            $('#results_div').append('<p class="error-text">' + error + '</p>');
+                        } else {
+                            if (carDealer == '0x0000000000000000000000000000000000000000') {
+                                // Set the new car dealer 10th account will be the car dealer
+                                taxiBusiness.methods.manager().call(function(error, manager) {
+                                    taxiBusiness.methods.setCarDealer(accounts[10]).send({'from': manager}, function await (error, response) {
+                                        if (error) {
+                                            $('#results_div').append('<p class="error-text">' + error + '</p>')
+                                        } else {
+                                            $('#results_div').append('<p>A new car dealer was created and set.</p>');
+
+                                            // Propose new car over the new car dealer
+                                            proposeNewCar(accounts[10]);
+                                        }
+                                    });
+                                });
+                            }
+                            else {
+                                // Propose new car over the existing car dealer
+                                proposeNewCar(carDealer);
+                            }
+                        }
+                    });
+                });
+
+                // Functions
+                function proposeNewCar(carDealer) {
+                    var carID = '12345678901234567890123456789012';
+                    var carPrice = 200000000000000;
+                    var offerValidTime = Math.round(Date.now() / 1000) + 24*3600;
+                    taxiBusiness.methods.carProposeToBusiness(carID, carPrice, offerValidTime).send({'from': carDealer}, function (error, response) { 
+                        if (error) {
+                            $('#results_div').append('<p class="error-text">' + error + '</p><hr>');
+                        } else {
+                            $('#results_div').append('<p>A new car with ID: ' + carID + ' and Price (wei): ' + carPrice + ' was proposed to the system</p><hr>');
+
+                            // Aprove the purchase of the car
+                            approvePurchaseCar();
+                        }
+                    });
+                }
+
+                function approvePurchaseCar() {
+                    taxiBusiness.methods.getParticipantCount().call(function (error, participantCount) {
+                        if (error) {
+                            $('#results_div').append('<p class="error-text">' + error + '</p>');
+                        } else {
+                            // Display warning message if no participant exist
+                            if (participantCount == 0) {
+                                $('#results_div').append('<p>There is no participant on the system!</p>');
+                            }
+
+                            // Display participant details if exist
+                            for (var i = 0; i < participantCount; i++) {
+                                taxiBusiness.methods.getParticipantDetails(i).call(function (error, participantDetails) {
+                                    if (error) {
+                                        $('#results_div').append('<p class="error-text">' + error + '</p>');
+                                    } else {
+                                        taxiBusiness.methods.approvePurchaseCar().send({'from': participantDetails[1]}, function await (error, response) {
+                                            if (error) {
+                                                $('#results_div').append('<p class="error-text">' + error + '</p>');
+                                            } else {
+                                                $('#results_div').append('<p>The participant <b>' + participantDetails[1] + '</b> was approved the proposed car.</p>');
+                                            }
+                                            $('#results_div').append('<hr>');
+                                            
+                                            // If the last participant approved, purchase the car
+                                            if (participantDetails[0] == participantCount - 1) {
+                                                purchaseTheProposedCar();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+
+                function purchaseTheProposedCar() {
+                    taxiBusiness.methods.manager().call(function(error, manager) {
+                        taxiBusiness.methods.purchaseCar().send({'from': manager}, function await (error, response) {
+                            if (error) {
+                                $('#results_div').append('<p class="error-text">' + error + '</p>');
+                            } else {
+                                $('#results_div').append('<p class="success-text">The proposed car was purchased.</p>');
+                            }
+                            $('#results_div').append('<hr>');
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
